@@ -1,0 +1,10 @@
+#!/bin/bash
+ICON_FONT="FontAwesome-14"
+WIDTH="1850" #screen width - gaps inner - gaps outer 
+HEIGHT="45" #conky height - gaps inner 20+45+20 85
+X="35" #gaps outer
+Y="20" #gaps inner
+POSITION="${WIDTH}x${HEIGHT}+${X}+${Y}"
+conky -c ~/.bin/conky.conf &> /dev/null&
+~/.bin/lemonbar_output | lemonbar -p -f $ICON_FONT -g $POSITION -d -f "Erusfont-14" -B "#66ffffff" -F "#FF00FF" -u "5"
+23/03

@@ -1,0 +1,9 @@
+own_window_type panel	
+own_window yes
+own_window_argb_visual true
+alignment tm
+own_window_transparent true
+
+minimum_size 50 30
+TEXT
+

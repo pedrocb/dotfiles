@@ -1,0 +1,42 @@
+#!/bin/bash
+. ~/.bin/lemonbar_config
+
+clock() {
+    CLOCK="$(date +"%R")"
+    DATE="$(date +"%d/%m/%Y")"
+    echo -e "\uf073 "$DATE"    \uf017" $CLOCK
+}
+
+wifi(){
+    WIFI_SIGNAL="$(awk "NR==3 {print int((\$3/70)*100)}" /proc/net/wireless)"
+    echo "\uf1eb  "$WIFI_SIGNAL"%"
+}
+
+volume(){
+    VOLUME="$(amixer get Master | awk -F'[]%[]' '/%/ {if ($5 == "off") {printf "%d\n",0} else {printf "%d\n", $2}}' |uniq)"
+    if [ "$VOLUME" -eq 0 ]
+    then
+	VOLUMEBAR="\uf026 ────────────────────"
+    else
+	VOLUMEBAR="\uf028 "
+	for i in {1..20}
+	do
+	    if [ $((i*5)) -le "$VOLUME" ];
+	    then
+		VOLUMEBAR=$VOLUMEBAR"━"
+	    else
+		VOLUMEBAR=$VOLUMEBAR"─"
+	    fi
+	done
+    fi
+	echo $VOLUMEBAR" "$VOLUME
+}
+
+
+PADDING="  "
+
+while true; do
+    BAR_INPUT="%{B#11ffffff}$PADDING$(wifi)$PADDING%{B#00000000}%{c}%{B#11ffffff}$PADDING$(clock)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}"
+    echo -e "$BAR_INPUT"
+    sleep 1
+done
