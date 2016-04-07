@@ -7,4 +7,5 @@ workspaces(){
 while true; do
     MESSAGE="%{c}$(workspaces)"
     echo -e "$MESSAGE"
+    sleep 1
 done

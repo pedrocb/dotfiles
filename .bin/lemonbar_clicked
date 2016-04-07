@@ -1,0 +1,20 @@
+#!/bin/bash
+. ~/.bin/lemonbar_config
+while read input;
+do
+    case $input in
+	"WIFI")
+	    terminator -e nmtui
+	    ;;
+	"SHUTUP")
+	    pactl set-sink-mute 1 toggle
+	    ;;
+	"VOL"*)
+	    TEST="$(echo $input | awk '{print $2}' )"
+	    ~/.bin/volume.sh set $TEST
+	    ;;
+	"SSID")
+	    SSID="$(iwgetid -r)"
+	    /usr/bin/notify-send $SSID
+    esac
+done
