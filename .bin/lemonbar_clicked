@@ -16,5 +16,8 @@ do
 	"SSID")
 	    SSID="$(iwgetid -r)"
 	    /usr/bin/notify-send $SSID
+	    ;;
+	"BATTERY")
+	    /usr/bin/notify-send "$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "time")"
     esac
 done
