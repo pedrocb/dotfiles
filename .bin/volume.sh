@@ -1,3 +1,4 @@
+. ~/.bin/lemonbar_config
 VOLUME="$(amixer get Master | awk -F'[]%[]' '/%/ {if ($5 == "off") {printf "%d\n",0} else {printf "%d\n", $2}}' |uniq)"
 
 if [ $1 == "up" ]; then
@@ -18,3 +19,10 @@ elif [ $1 == "set" ]; then
     pactl set-sink-volume 1 $2%
 fi
 
+STATE="$(cat $FILE)"
+if [ "$STATE" -eq 1 ]
+then
+   echo -n 0 > $FILE
+   sleep 3
+   echo -n 1 > $FILE
+fi

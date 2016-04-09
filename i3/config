@@ -215,10 +215,9 @@ bindsym $mod+Shift+d exec quickswitch.py 1
 exec xinput set-button-map 12 1 2 3 5 4 6 7 8 9 10 11 12
 #exec feh --bg-scale wallpaper_changer/blueishgreen.png
 exec setxkbmap -v pt
-exec --no-startup-id nm-applet
 #exec_always ~/.bin/lemonbarpanel
 #exec_always python ~/i3theme_generator/script.py
-exec compton -b
+exec_always compton -b
 
 client.focused #009977 #009977 #d244e5 
 client.unfocused #009977 #162d28 #4c3826 

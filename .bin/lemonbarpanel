@@ -7,8 +7,7 @@ HEIGHT="45" #conky height - gaps inner 20+45+20 85
 X="35" #gaps outer
 Y="20" #gaps inner
 POSITION="${WIDTH}x${HEIGHT}+${X}+${Y}"
+echo 1 > $FILE
 conky -c ~/.bin/conky.conf &> /dev/null&
 ~/.bin/lemonbar_output | lemonbar -p -f $ICON_FONT -g $POSITION -d -f "Erusfont-14" -F $FOCUSED_WORKSPACE_COLOR -u "5" -a 50 | ~/.bin/lemonbar_clicked &
 ~/.bin/bottom_panel_output | lemonbar -p -f $ICON_FONT -g "1000x5+460+1070" -d -f "Erusfont-14"  -u "5"
-23/03
-

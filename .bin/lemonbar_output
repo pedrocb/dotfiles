@@ -1,5 +1,7 @@
 #!/bin/bash
 . ~/.bin/lemonbar_config
+OPEN=true
+
 
 battery() {
     BATTERY="$(awk "{print}" /sys/class/power_supply/BAT0/capacity)"
@@ -20,8 +22,6 @@ battery() {
 	BATTERY_ICON="\uf244"
     fi
     echo -e "$BATTERY_ICON  $BATTERY%"
-
-    
 }
 
 clock() {
@@ -31,18 +31,30 @@ clock() {
 }
 
 wifi(){
-    WIFI_SIGNAL="$(awk "NR==3 {print int((\$3/70)*100)}" /proc/net/wireless)"
-    echo "%{A:WIFI:}\uf1eb%{A}  %{A:SSID:}"$WIFI_SIGNAL"%%{A}"
+    WIFISTATE="$(cat $WIFIFILE)"
+    WIFI="%{A:TOGGLEWIFI:}%{A3:WIFI:}%{B#11ffffff}$PADDING\uf1eb  "
+    if [ "$WIFISTATE" -eq 0 ]
+    then
+	INFO="$(awk "NR==3 {print int((\$3/70)*100)}" /proc/net/wireless)%"
+    else
+	INFO="$(iwgetid -r)"
+    fi
+    echo $WIFI" "$INFO"$PADDING%{B#00000000}%{A}%{A}"
 }
 
 volume(){
     VOLUME="$(amixer get Master | awk -F'[]%[]' '/%/ {if ($5 == "off") {printf "%d\n",0} else {printf "%d\n", $2}}' |uniq)"
     VOLUMECOMMAND="VOL"
+    STATE="$(cat $FILE)"
+    VOLUMEBAR="%{A3:SHUTUP:}%{A:TOGGLEVOLUME:}"
     if [ "$VOLUME" -eq 0 ]
     then
-	VOLUMEBAR="%{A:SHUTUP:}\uf026%{A} ────────────────────"
+	VOLUMEBAR=$VOLUMEBAR"\uf026%{A} "
     else
-	VOLUMEBAR="%{A:SHUTUP:}\uf028%{A} "
+	VOLUMEBAR=$VOLUMEBAR"\uf028%{A} "
+    fi
+    if [ "$STATE" -eq 0 ]
+    then
 	for i in {1..20} 
 	do
 	    if [ $((i*5)) -le "$VOLUME" ];
@@ -51,16 +63,18 @@ volume(){
 	    else
 		VOLUMEBAR=$VOLUMEBAR"%{A:"$VOLUMECOMMAND" "$((i*5))":}─%{A}"
 	    fi
+	    VOLUMEBAR=$VOLUMEBAR
 	done
     fi
-    echo "$VOLUMEBAR $VOLUME"
+    echo "$VOLUMEBAR $VOLUME%{A}"
 }
 
 
 PADDING="  "
 
+
 while true; do
-    BAR_INPUT="%{B#11ffffff}$PADDING$(wifi)$PADDING%{B#00000000}      %{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING%{A:BATTERY:}$(battery)%{A}$PADDING%{B#00000000}      %{B#11ffffff}$PADDING$(clock)$PADDING%{B#00000000}"
+    BAR_INPUT="$(wifi)      %{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING%{A:BATTERY:}$(battery)%{A}$PADDING%{B#00000000}      %{B#11ffffff}$PADDING%{A:CLOSE:}$(clock)%{A}$PADDING%{B#00000000}"
     echo -e "$BAR_INPUT"
-    sleep 1
+    sleep 0.1s
 done
