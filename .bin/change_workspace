@@ -1,0 +1,10 @@
+#!/bin/bash
+#!/bin/bash
+. ~/.bin/lemonbar_config
+
+COMMAND="i3-msg workspace "
+while read input;
+do
+    AUX=$COMMAND$input
+    eval $AUX > /dev/null    
+done
