@@ -21,7 +21,14 @@ battery() {
     else
 	BATTERY_ICON="\uf244"
     fi
-    echo -e "$BATTERY_ICON  $BATTERY%"
+    BATTERYSTATE="$(cat $BATTERYFILE)"
+    if [ "$BATTERYSTATE" -eq 1 ]
+    then
+	echo -e "$BATTERY_ICON  $BATTERY%"
+    else
+	TIME_LEFT="$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "time" | sed -e 's/^.*\( [0-9].*\)/\1/g' | sed -e 's/minutes/m/' | sed -e 's/hours/h/')"
+	echo -e "$BATTERY_ICON $TIME_LEFT"
+    fi
 }
 
 clock() {
@@ -84,5 +91,5 @@ PADDING="  "
 while true; do
     BAR_INPUT="$(wifi)      %{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING%{A:BATTERY:}$(battery)%{A}$PADDING%{B#00000000}      %{B#11ffffff}$PADDING%{A:CLOSE:}$(clock)%{A}$PADDING%{B#00000000}"
     echo -e "$BAR_INPUT"
-    sleep 0.1s
+    sleep 0.1
 done

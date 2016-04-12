@@ -195,7 +195,7 @@ new_window pixel 2
 
 hide_edge_borders both
 
-assign [class="Spotify"] 3
+for_window [class="Spotify"] move to workspace 3
 
 focus_follows_mouse no
 
@@ -205,8 +205,6 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
-# Keybind to look for windows
-bindsym $mod+Shift+d exec quickswitch.py 1
 
 # 
 # STARTUP stuff 
@@ -218,6 +216,8 @@ exec setxkbmap -v pt
 #exec_always ~/.bin/lemonbarpanel
 #exec_always python ~/i3theme_generator/script.py
 exec_always compton -b
+exec echo 1 > /tmp/wifiState
+
 
 client.focused #009977 #009977 #d244e5 
 client.unfocused #009977 #162d28 #4c3826 

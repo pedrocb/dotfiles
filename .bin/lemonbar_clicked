@@ -4,7 +4,7 @@ while read input;
 do
     case $input in
 	"WIFI")
-	    terminator -e nmtui
+	    terminator -e nmtui &
 	    ;;
 	"SHUTUP")
 	    pactl set-sink-mute 1 toggle
@@ -14,7 +14,8 @@ do
 	    ~/.bin/volume.sh set $TEST
 	    ;;
 	"BATTERY")
-	    /usr/bin/notify-send "$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "time")"
+	    [[ $(< $BATTERYFILE) -eq 0 ]] && echo -n 1 > $BATTERYFILE || echo -n 0 > $BATTERYFILE
+
 	    ;;
 	"TOGGLEVOLUME")
 	    [[ $(< $FILE) -eq 0 ]] && echo -n 1 > $FILE || echo -n 0 > $FILE

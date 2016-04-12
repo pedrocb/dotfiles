@@ -8,6 +8,8 @@ X="35" #gaps outer
 Y="20" #gaps inner
 POSITION="${WIDTH}x${HEIGHT}+${X}+${Y}"
 echo 1 > $FILE
+echo 1 > $WIFIFILE
+echo 1 > $BATTERYFILE
 conky -c ~/.bin/conky.conf &> /dev/null&
 ~/.bin/lemonbar_output | lemonbar -p -f $ICON_FONT -g $POSITION -d -f "Erusfont-14" -F $FOCUSED_WORKSPACE_COLOR -u "5" -a 50 | ~/.bin/lemonbar_clicked &
 ~/.bin/bottom_panel_output | lemonbar -p -f $ICON_FONT -g "1850x25+35+1050" -d -f "Inconsolata-6"  -u "5" -a 15 -d -F "#00000000" | ~/.bin/change_workspace

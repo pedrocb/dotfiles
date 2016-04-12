@@ -4,3 +4,4 @@ EMPTY_WORKSPACE=#000000
 
 FILE='/tmp/volumeState'
 WIFIFILE='/tmp/wifiState'
+BATTERYFILE='/tmp/batteryState'
