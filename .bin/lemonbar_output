@@ -89,7 +89,7 @@ PADDING="  "
 
 
 while true; do
-    BAR_INPUT="$(wifi)      %{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING%{A:BATTERY:}$(battery)%{A}$PADDING%{B#00000000}      %{B#11ffffff}$PADDING%{A:CLOSE:}$(clock)%{A}$PADDING%{B#00000000}"
+    BAR_INPUT="$(wifi)      %{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING%{A:BATTERY:}$(battery)%{A}$PADDING%{B#00000000}      %{B#11ffffff}$PADDING%{A:CLOSE:}$(clock)%{A}$PADDING%{B#00000000} "
     echo -e "$BAR_INPUT"
-    sleep 0.1
+    sleep 1
 done

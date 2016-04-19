@@ -173,8 +173,11 @@ smart_borders on
 # Activate multimedia keys
 #
 
-# Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.bin/volume.sh up #increase sound volume
+# Toggle transparency
+bindsym $mod+Shift+p exec ~/.bin/window_opacity.sh
+	
+# pulse audio controls
+bindsym xf86audioraisevolume exec --no-startup-id ~/.bin/volume.sh up #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/.bin/volume.sh down #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
 
@@ -218,6 +221,5 @@ exec setxkbmap -v pt
 exec_always compton -b
 exec echo 1 > /tmp/wifiState
 
-
-client.focused #009977 #009977 #d244e5 
-client.unfocused #009977 #162d28 #4c3826 
+client.focused #009975 #009975 #bd44e5 
+client.unfocused #009975 #162d28 #4c3126 

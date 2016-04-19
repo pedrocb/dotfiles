@@ -1,1 +1,0 @@
-    i3-msg -t get_workspaces | python ~/.bin/lemonbar_workspaces.py
