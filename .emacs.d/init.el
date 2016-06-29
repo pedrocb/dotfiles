@@ -1,4 +1,11 @@
+;;Tab width
 (setq tab-width 4)
+
+;;Undo buffers limit
+(setq undo-limit 20000000)
+(setq undo-strong-limit 40000000)
+(setq initial-buffer-choice "~/org/LEI.org")
+
 ;;Theme
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -12,8 +19,7 @@
  '(custom-safe-themes
    (quote
     ("3cd28471e80be3bd2657ca3f03fbb2884ab669662271794360866ab60b6cb6e6" "46fd293ff6e2f6b74a5edf1063c32f2a758ec24a5f63d13b07a20255c074d399" "0c29db826418061b40564e3351194a3d4a125d182c6ee5178c237a7364f0ff12" "96998f6f11ef9f551b427b8853d947a7857ea5a578c75aa9c4e7c73fe04d10b4" "3cc2385c39257fed66238921602d8104d8fd6266ad88a006d0a4325336f5ee02" "e9776d12e4ccb722a2a732c6e80423331bcb93f02e089ba2a4b02e85de1cf00e" "72a81c54c97b9e5efcc3ea214382615649ebb539cb4f2fe3a46cd12af72c7607" "58c6711a3b568437bab07a30385d34aacf64156cc5137ea20e799984f4227265" "3d5ef3d7ed58c9ad321f05360ad8a6b24585b9c49abcee67bdcbb0fe583a6950" "b3775ba758e7d31f3bb849e7c9e48ff60929a792961a2d536edec8f68c671ca5" "9b59e147dbbde5e638ea1cde5ec0a358d5f269d27bd2b893a0947c4a867e14c1" default)))
- '(initial-buffer-choice "~/org/LEI.org")
- '(linum-format " %7i ")
+ '(linum-format "%d ")
  '(org-agenda-files
    (quote
     ("~/org/compras.org" "~/org/personal.org" "~/keys.org" "~/org/LEI.org")))
@@ -57,8 +63,8 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 
 
-(set-default-font "Inconsolata-14")
-(setq default-frame-alist '((font . "Inconsolata-14")))
+(set-default-font "peep-20")
+(setq default-frame-alist '((font . "peep-20")))
 (require 'auto-complete-love)
 (add-hook 'lua-mode-hook '(lambda ()
 							(setq ac-sources '(ac-source-love))
@@ -66,7 +72,6 @@
 										; `auto-complete-lua' (see below)
 										;(push ac-source-lua ac-sources)
                             (auto-complete-mode)))
-
 
 (defun move-line-up ()
   "Move up the current line."
@@ -87,10 +92,10 @@
 (global-set-key [(control shift down)]  'move-line-down)
 
 
-(setq-default c-basic-offset 4)
+(setq-default c-basic-offset 2)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'wilson t)
+(load-theme 'junio t)
 
 (setq ring-bell-function 'ignore)
 
@@ -210,3 +215,12 @@
 (defun only-current-buffer () 
   (interactive)                                                                   
     (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
+
+(setq backup-directory-alist
+	  `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+	  `((".*" ,temporary-file-directory t)))
+
+(scroll-bar-mode -1)
+
+(global-auto-revert-mode t)

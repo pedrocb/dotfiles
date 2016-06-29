@@ -157,9 +157,7 @@ bindsym $mod+r mode "resize"
   #  font pango:DejaVu Sans Mono 16
  # status_command /usr/bin/conky-i3bar
  # tray_output primary
- # tray_padding 50e
- # position bottom
- #
+    #
 #}
 
 hide_edge_borders none
@@ -174,7 +172,7 @@ smart_borders on
 #
 
 # Toggle transparency
-#bindsym $mod+Shift+p exec --no-startup-id  ~/.bin/window_opacity.sh
+bindsym $mod+Shift+p exec --no-startup-id  ~/.bin/window_opacity.sh
 	
 # pulse audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.bin/volume.sh up #increase sound volume
