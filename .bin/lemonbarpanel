@@ -1,15 +1,16 @@
 #!/bin/bash
 . ~/.bin/lemonbar_config
 
-ICON_FONT="FontAwesome-14"
-WIDTH="1850" #screen width - gaps inner - gaps outer 
-HEIGHT="45" #conky height - gaps inner 20+45+20 85
-X="35" #gaps outer
-Y="20" #gaps inner
-POSITION="${WIDTH}x${HEIGHT}+${X}+${Y}"
+#Default states
 echo 1 > $FILE
 echo 1 > $WIFIFILE
 echo 1 > $BATTERYFILE
+
+#Invisible bar to treat lemonbar as a window
 conky -c ~/.bin/conky.conf &> /dev/null&
-~/.bin/lemonbar_output | lemonbar -p -f $ICON_FONT -g $POSITION -d -f "Erusfont-14" -F $FOCUSED_WORKSPACE_COLOR -u "5" -a 50 | ~/.bin/lemonbar_clicked &
-~/.bin/bottom_panel_output | lemonbar -p -f $ICON_FONT -g "1850x25+35+1050" -d -f "Inconsolata-6"  -u "5" -a 15 -d -F "#00000000" | ~/.bin/change_workspace
+
+#Top bar
+~/.bin/lemonbar_output | lemonbar -p -f $ICON_FONT -g $TOP_POSITION -d  -u "3" -U $BORDER_COLOR -f $TOP_BAR_FONT -F $FONT_COLOR -a 50 | ~/.bin/lemonbar_clicked &
+
+#Bottom workspace bar
+~/.bin/bottom_panel_output | lemonbar -p -f $ICON_FONT -g $BOT_POSITION -d -f $BOT_BAR_FONT  -u $WORKSPACE_ICON_SIZE -a 15 -d -F "#000000" -U $FOCUSED_WORKSPACE_COLOR | ~/.bin/change_workspace

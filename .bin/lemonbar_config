@@ -1,7 +1,38 @@
-FOCUSED_WORKSPACE_COLOR=#408071
+#Colors
+FOCUSED_WORKSPACE_COLOR=#804040
 UNFOCUSED_WORKSPACE_COLOR=#4D4D4D
-EMPTY_WORKSPACE=#000000
+EMPTY_WORKSPACE_COLOR=#222222
+BORDER_COLOR=#4D4D4D
+BACKGROUND_COLOR=#000000
+FONT_COLOR=#804040
 
+#Fonts
+ICON_FONT="FontAwesome-14"
+TOP_BAR_FONT="Terminus-18"
+BOT_BAR_FONT="Inconsolata-6"
+
+#Dimensions
+
+##########Top Bar
+TOP_WIDTH="1850" #screen width - gaps inner - gaps outer
+TOP_HEIGHT="45" #conky height - gaps inner 20+45+20 85
+TOP_X="35" #gaps outer
+TOP_Y="20" #gaps inner
+TOP_POSITION="${TOP_WIDTH}x${TOP_HEIGHT}+${TOP_X}+${TOP_Y}"
+
+##########Bottom Bar
+BOT_WIDTH=$TOP_WIDTH
+BOT_HEIGHT="25";
+BOT_X=$TOP_X;
+BOT_Y="1050"
+BOT_POSITION="${BOT_WIDTH}x${BOT_HEIGHT}+${BOT_X}+${BOT_Y}"
+
+
+#Others
+WORKSPACE_ICON_SIZE="5"
+
+
+#Files
 FILE='/tmp/volumeState'
 WIFIFILE='/tmp/wifiState'
 BATTERYFILE='/tmp/batteryState'

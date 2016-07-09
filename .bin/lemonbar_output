@@ -1,6 +1,5 @@
 #!/bin/bash
-. ~/.bin/lemonbar_config
-OPEN=true
+
 
 
 battery() {
@@ -39,7 +38,7 @@ clock() {
 
 wifi(){
     WIFISTATE="$(cat $WIFIFILE)"
-    WIFI="%{A:TOGGLEWIFI:}%{A3:WIFI:}%{B#11ffffff}$PADDING\uf1eb  "
+    WIFI="%{A:TOGGLEWIFI:}%{A3:WIFI:}\uf1eb  "
     if [ "$WIFISTATE" -eq 0 ]
     then
 	INFO="$(awk "NR==3 {print int((\$3/70)*100)}" /proc/net/wireless)%"
@@ -54,7 +53,7 @@ wifi(){
 	    INFO="Not Connected"
 	fi
     fi
-    echo $WIFI" "$INFO"$PADDING%{B#00000000}%{A}%{A}"
+    echo $WIFI" "$INFO"%{A}%{A}"
 }
 
 volume(){
@@ -89,7 +88,12 @@ PADDING="  "
 
 
 while true; do
-    BAR_INPUT="$(wifi)      %{B#11ffffff}$PADDING$(volume)$PADDING%{B#00000000}%{r}%{B#11ffffff}$PADDING%{A:BATTERY:}$(battery)%{A}$PADDING%{B#00000000}      %{B#11ffffff}$PADDING%{A:CLOSE:}$(clock)%{A}$PADDING%{B#00000000} "
+    . ~/.bin/lemonbar_config
+    BAR_INPUT="%{F$FONT_COLOR}%{U$BORDER_COLOR}%{c}%{+u}%{+o}%{B$BORDER_COLOR} %{B$BACKGROUND_COLOR}"
+    BAR_INPUT=$BAR_INPUT"$PADDING$(wifi)$PADDING"
+    BAR_INPUT=$BAR_INPUT"    $PADDING$(volume)$PADDING"
+    BAR_INPUT=$BAR_INPUT"    $PADDING$(battery)$PADDING" 
+    BAR_INPUT=$BAR_INPUT"    $PADDING$(clock)$PADDING%{B$BORDER_COLOR}%{-u}%{-o} %{B#00000000}"
     echo -e "$BAR_INPUT"
     sleep 1
 done

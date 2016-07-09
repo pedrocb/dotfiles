@@ -1,6 +1,6 @@
 UNFOCUSED_OPACITY=0.7
 killall compton
-STATE="$(cat dotfiles/compton.conf | grep inactive | grep -o -e '[0-9]\(.[0-9]\)\?')"
+STATE="$(cat ~/dotfiles/compton.conf | grep inactive | grep -o -e '[0-9]\(.[0-9]\)\?')"
 CONDITION="$(echo ${STATE}==${UNFOCUSED_OPACITY}|bc)"
 
 if [[ $CONDITION -eq 1 ]]
