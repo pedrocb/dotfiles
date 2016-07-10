@@ -36,3 +36,4 @@ WORKSPACE_ICON_SIZE="5"
 FILE='/tmp/volumeState'
 WIFIFILE='/tmp/wifiState'
 BATTERYFILE='/tmp/batteryState'
+BATTERYTOGGLE='/tmp/batteryToggle'

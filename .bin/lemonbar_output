@@ -89,7 +89,20 @@ PADDING="  "
 
 while true; do
     . ~/.bin/lemonbar_config
+    BATTERY="$(awk "{print}" /sys/class/power_supply/BAT0/capacity)"
+    TOGGLE=1
     BAR_INPUT="%{F$FONT_COLOR}%{U$BORDER_COLOR}%{c}%{+u}%{+o}%{B$BORDER_COLOR} %{B$BACKGROUND_COLOR}"
+    if [ "$BATTERY" -lt 15 ]
+    then
+	if [ "$(cat $BATTERYTOGGLE)" -eq 1 ] && [ "$(awk "{print}" /sys/class/power_supply/BAT0/status)" == "Discharging" ]
+	then
+	    BAR_INPUT=$BAR_INPUT"%{R}"
+	    echo 0 > $BATTERYTOGGLE
+	else
+	    echo 1 > $BATTERYTOGGLE
+	fi
+    fi
+
     BAR_INPUT=$BAR_INPUT"$PADDING$(wifi)$PADDING"
     BAR_INPUT=$BAR_INPUT"    $PADDING$(volume)$PADDING"
     BAR_INPUT=$BAR_INPUT"    $PADDING$(battery)$PADDING" 
