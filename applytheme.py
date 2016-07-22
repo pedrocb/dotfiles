@@ -43,4 +43,6 @@ for obj in config.keys():
         handle_i3(config[obj])
     elif obj == "lemonbar":
         handle_lemonbar(config[obj])
-        
+    elif obj == "wallpaper":
+        os.system("feh --bg-scale {}".format(config[obj]))
+    
