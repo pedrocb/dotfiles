@@ -1,0 +1,27 @@
+{
+    "i3": {
+        "client-focused": {
+            "border": "#990000",
+            "background": "#990000",
+            "text": "#bd44e5"
+        },
+        "client-unfocused": {
+            "border": "#990000",
+            "background": "#2D1616",
+            "text": "#4C3126"
+        }
+    },
+    "lemonbar": {
+        "top-bar": {
+            "border": "#4D4D4D",
+            "background": "#000000",
+            "font": "#804040"
+        },
+        "bottom-bar": {
+            "focused-workspace": "#804040",
+            "unfocused-workspace": "#4D4D4D",
+	    "empty-workspace": "#222222"
+        }
+    },
+    "wallpaper": "~/Desktop/vblack.jpg"
+}

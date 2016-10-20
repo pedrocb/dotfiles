@@ -1,0 +1,41 @@
+
+;; ----- smex-history -----
+(
+ cd
+ 5x5
+ arp
+ dbx
+ dig
+ erc
+ ert
+ eww
+ ftp
+ gdb
+ irc
+ jdb
+ man
+ mpc
+ pdb
+ pwd
+ rsh
+ sdb
+ xdb
+ calc
+ deft
+ diff
+ dirs
+ ffap
+ gnus
+ grep
+ help
+ ielm
+ info
+ life
+ mail
+ mpuz
+)
+
+;; ----- smex-data -----
+(
+ 
+)

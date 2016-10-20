@@ -1,0 +1,9 @@
+;;; -*- coding: utf-8 -*-
+(("/home/pedro/.emacs.d/.cache/recentf" . 308)
+ ("/home/pedro/.spacemacs" . 529)
+ ("/home/pedro/.emacs.d/.cache/layouts/persp-auto-save" . 711)
+ ("/home/pedro/theeman/commands/"
+  (dired-filename . "/home/pedro/theeman/commands/.."))
+ ("/home/pedro/theeman/"
+  (dired-filename . "/home/pedro/theeman/main.go"))
+ ("/home/pedro/theeman/main.go" . 219))

@@ -1,5 +1,7 @@
 ((ample-regexps status "installed" recipe
 		(:name ample-regexps :description "Compose and reuse Emacs regular expressions with ease" :type github :pkgname "immerrr/ample-regexps.el"))
+ (cl-lib status "installed" recipe
+	 (:name cl-lib :builtin "24.3" :type elpa :description "Properly prefixed CL functions and macros" :url "http://elpa.gnu.org/packages/cl-lib.html"))
  (el-get status "installed" recipe
 	 (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "master" :pkgname "dimitri/el-get" :info "." :compile
 		("el-get.*\\.el$" "methods/")
@@ -22,12 +24,16 @@
 			  (feat feats)
 			(unload-feature feat t))))
 		  (require 'el-get))))
+ (ido-ubiquitous status "installed" recipe
+		 (:name ido-ubiquitous :description "Use ido (nearly) everywhere" :website "https://github.com/DarwinAwardWinner/ido-ubiquitous" :type github :depends
+			(cl-lib s)
+			:pkgname "DarwinAwardWinner/ido-ubiquitous"))
  (lua-mode status "installed" recipe
 	   (:name lua-mode :description "A major-mode for editing Lua scripts" :depends
 		  (ample-regexps)
 		  :type github :pkgname "immerrr/lua-mode"))
  (package status "installed" recipe
-	  (:name package :description "ELPA implementation (\"package.el\") from Emacs 24" :builtin "24" :type http :url "http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el" :shallow nil :features package :post-init
+	  (:name package :description "ELPA implementation (\"package.el\") from Emacs 24" :builtin "24" :type http :url "https://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el" :features package :post-init
 		 (progn
 		   (let
 		       ((old-package-user-dir
@@ -41,12 +47,30 @@
 		       (add-to-list 'package-directory-list old-package-user-dir)))
 		   (setq package-archives
 			 (bound-and-true-p package-archives))
-		   (mapc
-		    (lambda
-		      (pa)
-		      (add-to-list 'package-archives pa 'append))
-		    '(("ELPA" . "http://tromey.com/elpa/")
-		      ("melpa" . "http://melpa.org/packages/")
-		      ("gnu" . "http://elpa.gnu.org/packages/")
-		      ("marmalade" . "http://marmalade-repo.org/packages/")
-		      ("SC" . "http://joseito.republika.pl/sunrise-commander/")))))))
+		   (let
+		       ((protocol
+			 (if
+			     (and
+			      (fboundp 'gnutls-available-p)
+			      (gnutls-available-p))
+			     "https://"
+			   (lwarn
+			    '(el-get tls)
+			    :warning "Your Emacs doesn't support HTTPS (TLS)%s"
+			    (if
+				(eq system-type 'windows-nt)
+				",\n  see https://github.com/dimitri/el-get/wiki/Installation-on-Windows." "."))
+			   "http://"))
+			(archives
+			 '(("melpa" . "melpa.org/packages/")
+			   ("gnu" . "elpa.gnu.org/packages/")
+			   ("marmalade" . "marmalade-repo.org/packages/"))))
+		     (dolist
+			 (archive archives)
+		       (add-to-list 'package-archives
+				    (cons
+				     (car archive)
+				     (concat protocol
+					     (cdr archive)))))))))
+ (s status "installed" recipe
+    (:name s :description "The long lost Emacs string manipulation library." :type github :pkgname "magnars/s.el")))

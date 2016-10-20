@@ -1,0 +1,28 @@
+{
+    "i3": {
+        "client-focused": {
+            "border": "#2F8971",
+            "background": "#2F8971",
+            "text": "#bd44e5"
+        },
+        "client-unfocused": {
+            "border": "#242324",
+            "background": "#242324",
+            "text": "#4C3126"
+        }
+    },
+    "lemonbar": {
+        "top-bar": {
+            "border": "#2F8971",
+            "background": "#262626",
+            "font": "#98D597"
+        },
+        "bottom-bar": {
+            "focused-workspace": "#98D597",
+            "unfocused-workspace": "#4D4D4D",
+	          "empty-workspace": "#000000"
+        },
+        "script": "~/.bin/lemonbarpanel"
+    },
+    "wallpaper": "~/Desktop/5JzR3jD.png"
+}

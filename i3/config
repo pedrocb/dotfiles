@@ -13,7 +13,6 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-#font xft:Inconsolata 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -35,20 +34,13 @@ bindsym $mod+Return exec i3-sensible-terminal
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-#bindsym $mod+d exec dmenu_run
-bindsym $mod+d exec rofi -run-list-command "~/.bin/zsh_aliases_functions.sh" -run-command "/bin/zsh -i -c '{cmd}'" -show run
-
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-
+# start rofi (a program launcher)
+bindsym $mod+d exec rofi -show run -run-command "zsh -i -c '{cmd}'"
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l exec "blurscreen"
-bindsym $mod+ç focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -57,10 +49,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -69,10 +61,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+Ctrl+h split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+Ctrl+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -91,9 +83,6 @@ bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
-# focus the child container
-#bindsym $mod+d focus child
-
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -105,6 +94,7 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
+
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -133,10 +123,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -151,52 +141,80 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-  #  font pango:DejaVu Sans Mono 16
- # status_command /usr/bin/conky-i3bar
- # tray_output primary
-    #
-#}
+## Manual management of external displays
+mode "$mode_display" {
+    bindsym y exec --no-startup-id xrandr --output HDMI1 --auto --right-of eDP1, mode "default"
+    bindsym n exec --no-startup-id xrandr --output HDMI1 --auto --off, mode "default"
 
-hide_edge_borders none
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+# Declare here the shortcut to bring the display selection menu
+bindsym $mod+x mode "$mode_display"
+
+mode "goto" {
+     bindsym t [class="Terminator"] focus; mode "default"
+     bindsym g [class="chromium"] focus; mode "default"
+     bindsym s [class="Slack"] focus; mode "default"
+     bindsym e [class="Emacs"] focus; mode "default"
+     bindsym m [class="Spotify"] focus; mode "default"
+
+     # back to normal: Enter or Escape
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+}
+bindsym $mod+g mode "goto"
+
+mode "launch" {
+     bindsym g exec chromium; mode "default"
+     bindsym s exec slack; mode "default"
+     bindsym m exec spotify; mode "default"
+
+     bindsym e exec emacs; mode "default"
+     # back to normal: Enter or Escape
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+}
+bindsym $mod+Shift+g mode "launch"
 
 gaps inner 10
 gaps outer 25
 
-#smart_gaps on
-smart_borders on
-#
-# Activate multimedia keys
-#
 
-# Toggle transparency
-bindsym $mod+Shift+p exec --no-startup-id  ~/.bin/window_opacity.sh
-	
+smart_borders on
+
+# Toggle window transparency
+bindsym $mod+Shift+p exec --no-startup-id  ~/.bin/window_opacity
+
+# Toggle lemonbar
+bindsym $mod+Shift+o exec --no-startup-id  ~/.bin/toggle_lemonbar
+# Lock screen
+bindsym $mod+Ctrl+l exec ~/.bin/lockscreen
+
 # pulse audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.bin/volume.sh up #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id ~/.bin/volume.sh down #decrease sound volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.bin/volume up #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.bin/volume down #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightnes
 
-# Touchpad controls
-bindsym XF86TouchpadToggle exec toggletouchpad.sh # toggle touchpad
-
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-		      
+
 new_window pixel 2
 
 hide_edge_borders both
 
-for_window [class="Spotify"] move to workspace 3
+bindsym $mod+Shift+Tab move workspace to HDMI1
+bindsym $mod+Tab move workspace to eDP1
+
+#for_window [class="Spotify"] move to workspace 10
 
 focus_follows_mouse no
 
@@ -206,18 +224,24 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
+# Goes back to previous workspace if you try to change to current workspace
+workspace_auto_back_and_forth yes
 
-# 
-# STARTUP stuff 
-#
+# Goes to previous workspace
+bindsym $mod+z workspace back_and_forth
+
+# Moves window to previous workspace
+bindsym $mod+Shift+z move container to workspace back_and_forth
+
+# STARTUP stuff
 
 exec xinput set-button-map 12 1 2 3 5 4 6 7 8 9 10 11 12
-#exec feh --bg-scale wallpaper_changer/blueishgreen.png
 exec setxkbmap -v pt
-#exec_always ~/.bin/lemonbarpanel
-#exec_always python ~/i3theme_generator/script.py
+
 exec_always compton -b
 exec echo 1 > /tmp/wifiState
+exec echo 0 > /tmp/lemonbarState
 
-client.focused #009975 #009975 #bd44e5 
-client.unfocused #009975 #162d28 #4c3126 
+#Theme colors
+client.focused  #2F8971 #2F8971 #bd44e5
+client.unfocused  #242324 #242324 #4C3126

@@ -1,213 +1,129 @@
-;;Tab width
-(setq tab-width 4)
+;; Packages
+(require 'package)
+(setq package-list '(evil
+                     evil-leader
+		     helm
+		     org
+		     company
+		     go-mode
+		     go-eldoc
+           ))
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
 
-;;Undo buffers limit
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/") ; Add theme path
+(load-file"~/.emacs.d/functions.el") ; Add theme path
+
+;; Evil-mode
+(require 'evil)
+(evil-mode t)
+
+(require 'evil-leader)
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>")
+(evil-leader/set-key
+  "b" 'switch-to-buffer
+  "f" 'spacemacs/helm-find-files
+  )
+
+(setq tab-width 4) ; Tab width
+
+;; Undo limits
 (setq undo-limit 20000000)
 (setq undo-strong-limit 40000000)
 
-;;Initial buffer
-(setq initial-buffer-choice "~/org/LEI.org")
+(global-company-mode t)
 
-;;Add themes
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+(electric-pair-mode 1) ; Double brackets
 
-;;Double bracket
-(electric-pair-mode 1)
+(delete-selection-mode 1) ; Replace active region
 
-;;Replace active region by typing
-(delete-selection-mode 1)
+(show-paren-mode 1) ; Highlights matching paren pair
 
-;;Highlights matching paren pair
-(show-paren-mode 1)
-
-;;El-get
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-(el-get 'sync)
-
-;;ELPA
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
-
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
-(ac-config-default)
-
-;;Helm
-(require 'helm-config)
+;; Helm
+(helm-mode)
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
 (global-set-key (kbd "M-x") 'helm-M-x)
 
-;;Ido
-(require 'ido)
-(ido-mode t)
+(set-default-font "Liberation Mono-13") ;; Font
 
-;;Ruby
-(require 'flymake-ruby)
-(add-hook 'ruby-mode-hook 'flymake-ruby-load)
+(global-set-key [(control shift k)] 'move-line-up) ;; Move line up
+(global-set-key [(control shift j)] 'move-line-down) ;; Move line down
 
-;;Font
-(set-default-font "-zevv-peep-medium-r-normal--20-175-75-75-c-100-iso8859-15")
-(setq default-frame-alist '((font . "-zevv-peep-medium-r-normal--20-175-75-75-c-100-iso8859-15")))
-
-;;Move line up
-(defun move-line-up ()
-  "Move up the current line."
-  (interactive)
-  (transpose-lines 1)
-  (forward-line -2)
-  (indent-according-to-mode))
-(global-set-key [(control shift up)]  'move-line-up)
-										
-;;Move line down
-(defun move-line-down ()
-  "Move down the current line."
-  (interactive)
-  (forward-line 1)
-  (transpose-lines 1)
-  (forward-line -1)
-  (indent-according-to-mode))
-(global-set-key [(control shift down)]  'move-line-down)
-
-;;C
-(setq-default c-basic-offset 2)
-
-;;Theme
+;; Theme
 (load-theme 'junio t)
 
-;;No bell
-(setq ring-bell-function 'ignore)
+(setq ring-bell-function 'ignore) ;;No bell
 
-;;Disable bars
+;; Disables bars
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(scroll-bar-mode -1)
 
-;;Keyboard scroll
-(setq scroll-step 1)
+(setq scroll-step 1) ;; Keyboard scroll
 
-;; Show line-number in the mode line
+;; Show line and column in the mode line
 (line-number-mode 1)
-
-;; Show column-number in the mode line
 (column-number-mode 1)
 
-;;Key binds
-(global-unset-key (kbd "C-h"))
-(global-unset-key (kbd "C-j"))
-(global-unset-key (kbd "C-k"))
-(global-unset-key (kbd "C-l"))
+(fset 'yes-or-no-p 'y-or-n-p) ;; yes or no message
 
-(global-set-key (kbd "C-h") 'backward-char)
-(global-set-key (kbd "C-j") 'next-line)
-(global-set-key (kbd "C-k") 'previous-line)
-(global-set-key (kbd "C-l") 'forward-char)
+(setq inhibit-splash-screen t) ;; Disable splash screen
 
-;;yes or no message
-(fset 'yes-or-no-p 'y-or-n-p)
+;; Moves up/down a visual line instead of a text line
+(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
-;;org
-(require 'org)
-(global-set-key "\C-cl" 'org-store-link) 
-(global-set-key "\C-ca" 'org-agenda)    ;;Keybinds
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
-(setq org-adapt-indentation nil) ;;Not sure
-(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode)) ;;turns org-mode as default mode for .org, .org_archive, .txt
-(setq org-todo-keywords
-	  '((sequence "SOON" "TODO" "DOING" "DONE")))
-(setq org-file-apps
-      '((auto-mode . emacs)
-        ("\\.x?html?\\'" . "google-chrome-stable %s")
-		))
-;;Agenda files
-(org-agenda-files
- (quote
-  ("~/org/compras.org" "~/org/personal.org" "~/keys.org" "~/org/LEI.org")))
-;;Prevents edits on invisible part
-(setq-default org-catch-invisible-edits 'smart)
-;;Clean view
-(setq-default org-startup-indented t)
+;; Esc quits minibuffer
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(global-set-key [escape] 'evil-exit-emacs-state)
 
+;; C-movekey increases movement
+(define-key evil-normal-state-map (kbd "C-k") (lambda ()
+                    (interactive)
+                    (backward-paragraph nil)))
+(define-key evil-normal-state-map (kbd "C-j") (lambda ()
+                        (interactive)
+                        (forward-paragraph nil)))
+(define-key evil-normal-state-map (kbd "C-h") (lambda ()
+                        (interactive)
+                        (left-word nil)))
+(define-key evil-normal-state-map (kbd "C-l") (lambda ()
+                        (interactive)
+                        (right-word nil)))
 
-;;Disable splash screen
-(setq inhibit-splash-screen t)
+;; Disables cursor moving one position when leaving insert mode
+(setq evil-move-cursor-back nil)
 
-;; Base functions to copy functions
-(defun get-point (symbol &optional arg)
-  "get the point"
-  (funcall symbol arg)
-  (point)
-  )
-(defun copy-thing (begin-of-thing end-of-thing &optional arg)
-  "copy thing between beg & end into kill ring"
-  (save-excursion
-	(let ((beg (get-point begin-of-thing 1))
-		  (end (get-point end-of-thing arg)))
-	  (copy-region-as-kill beg end)))
-  )
-(defun paste-to-mark(&optional arg)
-  "Paste things to mark, or to the prompt in shell-mode"
-  (let ((pasteMe 
-     	 (lambda()
-     	   (if (string= "shell-mode" major-mode)
-			   (progn (comint-next-prompt 25535) (yank))
-			 (progn (goto-char (mark)) (yank) )))))
-	(if arg
-		(if (= arg 1)
-     		nil
-		  (funcall pasteMe))
-	  (funcall pasteMe))
-	))
-(defun copy-word (&optional arg)
-  "Copy words at point into kill-ring"
-  (interactive "P")
-  (copy-thing 'backward-word 'forward-word arg)
-  ;;(paste-to-mark arg)
-  )
-(defun beginning-of-string(&optional arg)
-  "  "
-  (re-search-backward "[ \t]" (line-beginning-position) 3 1)
-  (if (looking-at "[\t ]")  (goto-char (+ (point) 1)) )
-  )
-(defun end-of-string(&optional arg)
-  " "
-  (re-search-forward "[ \t]" (line-end-position) 3 arg)
-  (if (looking-back "[\t ]") (goto-char (- (point) 1)) )
-  )
-(defun thing-copy-string-to-mark(&optional arg)
-  " Try to copy a string and paste it to the mark
-     When used in shell-mode, it will paste string on shell prompt by default "
-  (interactive "P")
-  (copy-thing 'beginning-of-string 'end-of-string arg)
-  ;(paste-to-mark arg)
-  )
+;;Go
+(add-hook 'go-mode-hook 'go-mode-setup)
 
-;;Copy string
-(global-set-key (kbd "C-c s")         (quote thing-copy-string-to-mark))
-;;Copy word
-(global-set-key (kbd "C-c w")         (quote copy-word))
-
-;Function to kill all buffers besides current one
-(defun only-current-buffer () 
-  (interactive)                                                                   
-    (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
-
-;;Defines auto-save files and backup files directory
-(setq backup-directory-alist
-	  `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-	  `((".*" ,temporary-file-directory t)))
-
-;;Disables scroll bar
-(scroll-bar-mode -1)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("46fd293ff6e2f6b74a5edf1063c32f2a758ec24a5f63d13b07a20255c074d399" "3cc2385c39257fed66238921602d8104d8fd6266ad88a006d0a4325336f5ee02" "f46ebf04f3877132b28a245b063a51bc8c4c2a68bbf58ef4257fae613a6447c4" "03ea866815fe82c4736611acafef3c90519d15cd3d465d8f146ebfa3a293b663" "f34b107e8c8443fe22f189816c134a2cc3b1452c8874d2a4b2e7bb5fe681a10b" default)))
+ '(package-selected-packages (quote (helm helm-config evil-leader evil))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

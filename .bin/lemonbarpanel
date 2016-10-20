@@ -9,6 +9,18 @@ echo 1 > $BATTERYFILE
 #Invisible bar to treat lemonbar as a window
 conky -c ~/.bin/conky.conf &> /dev/null&
 
+#Write pid
+echo $BASHPID > $LEMONBARPID
+
+#Clean up function
+function clean_up {
+    rm $LEMONBARPID
+    exit
+}
+
+#Catch signals
+trap clean_up SIGHUP SIGINT SIGTERM
+
 #Top bar
 ~/.bin/lemonbar_output | lemonbar -p -f $ICON_FONT -g $TOP_POSITION -d  -u "3" -U $BORDER_COLOR -f $TOP_BAR_FONT -F $FONT_COLOR -a 50 | ~/.bin/lemonbar_clicked &
 

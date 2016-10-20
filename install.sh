@@ -14,3 +14,6 @@ ln -s ~/dotfiles/compton.conf ~/.config/compton.conf
 rm ~/.config/.emacs.d
 ln -s ~/dotfiles/.emacs.d ~/.emacs.d
 
+#bthemer
+rm ~/.bthemer
+ln -s ~/dotfiles/.bthemer ~/.bthemer

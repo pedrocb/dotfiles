@@ -1,0 +1,17 @@
+#!/bin/bash
+. ~/.bin/lemonbar_config
+
+if [ -f $LEMONBARPID ];
+then
+    echo "kill -TERM -- -$(cat $LEMONBARPID)"
+    $(kill -TERM -- -$(cat $LEMONBARPID))
+    i3-msg gaps inner all set 0
+    i3-msg gaps outer all set 0
+else
+    setsid ~/.bin/lemonbarpanel &
+    i3-msg gaps inner all set 10
+    i3-msg gaps outer all set 25
+    sleep 0.5
+    i3-msg restart
+fi
+echo $BASHPID

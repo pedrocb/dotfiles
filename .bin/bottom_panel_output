@@ -1,4 +1,3 @@
-
 workspaces(){
     i3-msg -t get_workspaces | python2 ~/.bin/lemonbar_workspaces.py | sed 's/color1/'$FOCUSED_WORKSPACE_COLOR'/g' |  sed 's/color2/'$UNFOCUSED_WORKSPACE_COLOR'/g' | sed 's/color3/'$EMPTY_WORKSPACE_COLOR'/g'
 }
