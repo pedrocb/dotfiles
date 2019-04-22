@@ -53,3 +53,4 @@ flycheck_*.el
 recentf
 savehist
 .secret.el
+/request
