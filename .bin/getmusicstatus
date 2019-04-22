@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Script that prints current music playing on spotify. Used in lemonbar output
+# Usage:
+# getmusicstatus
+
+SPOTIFY_PID="$(pidof -s spotify)"
+if [ "$SPOTIFY_PID" ]; then
+    dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'    | grep -Ev "^method"                           `# Ignore the first line.`   \
+	| grep -Eo '("(.*)")|(\b[0-9][a-zA-Z0-9.]*\b)' `# Filter interesting fields.`\
+	| sed -E '2~2 a|'                              `# Mark odd fields.`         \
+	| tr -d '\n'                                   `# Remove all newlines.`     \
+	| sed -E 's/\|/\n/g'                           `# Restore newlines.`        \
+	| sed -E 's/(xesam:)|(mpris:)//'               `# Remove ns prefixes.`      \
+	| sed -E 's/^"//'                              `# Strip leading...`         \
+	| sed -E 's/"$//'                              `# ...and trailing quotes.`  \
+	| sed -E 's/"+/|/'                             `# Regard "" as seperator.`  \
+	| sed -E 's/ +/ /g'                            `# Merge consecutive spaces.`\
+	| grep --color=never -E "(title)|(artist)" \
+	| cut -d\| -f2- \
+	| awk -vORS=' - ' '{ print $0 }' | sed 's/ - $/\n/'
+else
+    echo ""
+fi

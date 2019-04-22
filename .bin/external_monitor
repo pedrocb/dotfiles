@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Script used to output screen to external monitor
+
+# Restarts the bar so it extends to the external monitor
+# Organizes workspaces for each monitor
+# It changes keyboard layout
+
+# Note: Monitors are hardcoded
+
+# Usage:
+# external_monitor {on | off}
+
+if [ "$1" == "on" ]; then
+    xrandr --output HDMI-1 --auto --right-of eDP-1
+    #TODO: Use theeman to restart only the bar
+    restart_bar
+    i3-msg "workspace 0"
+    i3-msg "workspace 1, move workspace to output eDP-1"
+    i3-msg "workspace 2, move workspace to output eDP-1"
+    i3-msg "workspace 3, move workspace to output eDP-1"
+    i3-msg "workspace 4, move workspace to output eDP-1"
+    i3-msg "workspace 5, move workspace to output eDP-1"
+    i3-msg "workspace 6, move workspace to output HDMI-1"
+    i3-msg "workspace 7, move workspace to output HDMI-1"
+    i3-msg "workspace 8, move workspace to output HDMI-1"
+    i3-msg "workspace 9, move workspace to output HDMI-1"
+    i3-msg "workspace 10, move workspace to output HDMI-1"
+    keyboard_layout us
+elif [ "$1" == "off" ]; then
+    xrandr --output HDMI-1 --auto --off
+    restart_bar
+    keyboard_layout pt
+fi

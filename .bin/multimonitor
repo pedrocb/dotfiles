@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Script to copy and attribute lemonbar output for each monitor.
+# Usage:
+# echo $OUTPUT | multimonitor
+
+Monitors=$(xrandr | grep -o "^.* connected" | sed "s/ connected//")
+tmp=0
+barout=""
+while IFS= read -r final; do
+    for _ in $Monitors; do
+	barout=$barout"%{S${tmp}}${final}"
+	tmp=$tmp+1
+    done
+done
+echo -e "${barout}"

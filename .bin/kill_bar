@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Kills active bar process. Used to restart bar.
+# Usage:
+# kill_bar
+
+LEMONBARPID='/tmp/bar.pid'
+
+if [ -f $LEMONBARPID ];
+then
+    kill -TERM -- -"$(cat $LEMONBARPID)"
+fi

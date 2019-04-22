@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Script to change keyboard layout to pt or us and to map caps lock key to escape.
+# Usage:
+# keyboard_layout {toggle | us | pt}
+
+LAYOUT="$(setxkbmap -query | grep layout | awk '{print $NF}')"
+
+if [ "$1" == "toggle" ]; then
+    if [ "$LAYOUT" = "us" ]; then
+	setxkbmap -option caps:escape -layout pt
+    else
+	setxkbmap -option caps:escape -layout us
+    fi;
+elif [ "$1" == "us" ] && [ "$LAYOUT" != "us" ]; then
+    setxkbmap -option caps:escape -layout us
+elif [ "$1" == "pt" ] && [ "$LAYOUT" != "pt" ]; then
+    setxkbmap -option caps:escape -layout pt
+fi;

@@ -1,10 +1,13 @@
 #!/bin/bash
-#!/bin/bash
-. ~/.bin/lemonbar_config
+
+# Script to change workspaces. Used with lemonbar to change workspace when workspace is clicked.
+# Usage:
+# echo 1 | change_workspace
+
 
 COMMAND="i3-msg workspace "
-while read input;
+while read -r input;
 do
     AUX=$COMMAND$input
-    eval $AUX > /dev/null    
+    eval "$AUX" > /dev/null
 done

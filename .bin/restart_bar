@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Restarts current bar. Also used to start bar.
+# Usage:
+# restart_bar
+
+kill_bar
+setsid /home/belem/.theeman/themes/current/bar/bar.sh &

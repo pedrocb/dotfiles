@@ -1,28 +1,17 @@
-. ~/.bin/lemonbar_config
-VOLUME="$(amixer get Master | awk -F'[]%[]' '/%/ {if ($5 == "off") {printf "%d\n",0} else {printf "%d\n", $2}}' |uniq)"
+#!/bin/bash
 
-if [ $1 == "up" ]; then
-    if [ $VOLUME -gt 95 ];
-    then
-	pactl set-sink-volume 1 100%
-    else
-	pactl set-sink-volume 1 +5%
-    fi
-elif [ $1 == "down" ]; then
-    if [ "$VOLUME" -lt 6 ];
-    then
-	pactl set-sink-volume 1 1%
-    else
-	pactl set-sink-volume 1 -5%
-    fi
-elif [ $1 == "set" ]; then
-    pactl set-sink-volume 1 $2%
-fi
+# Controls volume.
+# Usage:
+# volume {up | down | set <vol> | show}
 
-STATE="$(cat $FILE)"
-if [ "$STATE" -eq 1 ]
-then
-   echo -n 0 > $FILE
-   sleep 3
-   echo -n 1 > $FILE
+if [ "$1" = up ]; then
+    pamixer -i 5
+elif [ "$1" = "down" ]; then
+    pamixer -d 5
+elif [ "$1" = "set" ]; then
+    pamixer --set-volume "$2"
+elif [ "$1" = "toggle" ]; then
+    pamixer -t
+elif [ "$1" = "show" ]; then
+    echo -e "$(pamixer --get-volume)"
 fi
